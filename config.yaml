@@ -1,0 +1,49 @@
+---
+- hosts: all
+  become: true
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+  tasks:
+
+  - name: install python3 package
+    apt:
+      name: python3
+
+  - name: install python3-pip package
+    apt:
+      name: python3-pip
+
+  - name: using pip3 as default pip
+    shell: update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+
+  - name: using python3 as default
+    shell: update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+
+  - name: install Java open-jdk
+    apt:
+      name: openjdk-11-jdk
+
+  - name: install MariaDB Server
+    apt:
+      name: mariadb-server
+
+  - name: start MariaDB
+    service:
+      name: mariadb
+      enabled: true
+
+  - name: User 
+    user: 
+      name: rpldpaul
+      state: present
+      shell: /bin/bash
+      comment: "Prelim Exam Task"
+      createhome: yes
+
+  - name: MOTD
+    copy:
+      content: "Ansible Managed by paul_eimar"
+      dest: /etc/motd   
+
+  
